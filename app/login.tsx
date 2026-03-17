@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+
 import {
   Alert,
   Image,
@@ -20,32 +21,18 @@ const logoApp = require("@/assets/images/Logonutri.png");
 interface Usuario {
   email: string;
   senha: string;
-  nome?: string; // opcional, se tiver a coluna nome
+  nome_usuario: string; 
 }
 
 export default function Login() {
-  // const [dados, setDados] = useState([]);// começa array vazio pq não te nada do BD ainda
   const [dados, setDados] = useState<Usuario[]>([]);
   const router = useRouter();
   const [login, setLogin] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
 
-  // useEffect(() => {// meu gatilho de ação useeffect vao receber o fetch
-  //   // aqui vai o endereço de IPv4 :3000/dados 
-  //   fetch('http://192.168.14.202:3000/dados') //esse é o meu, coloque o de vocês
-  //     .then(res => res.json()) //quando server responde, trabforma em json
-  //     .then(json => {
-  //       setDados(json);// pega lista do BD e guarda na variável dados
-  //     })
-  //     .catch(err => { // se servidor estiver desligado cai aqui
-  //       console.error("Erro ao conectar na API:", err);
-  //     });
-  // }, []);
-  
 useEffect(() => {
-  // O 10.0.2.2 é o "atalho" do emulador para o seu PC
-  fetch('http://10.0.2.2:3000/dados') 
+  fetch('http://10.0.2.2:3000/dados') // O Ip é do Android Studio
     .then(res => res.json())
     .then(json => {
       setDados(json);
@@ -55,18 +42,6 @@ useEffect(() => {
       console.error("❌ Erro de conexão:", err);
     });
 }, []);
-
-//   useEffect(() => {
-//     // Substitua pelo link que apareceu no seu terminal
-//     fetch('https://cold-points-show.loca.lt') 
-//       .then(res => res.json())
-//       .then(json => {
-//         setDados(json);
-//       })
-//       .catch(err => {
-//         console.error("Erro ao conectar na API:", err);
-//       });
-// }, []);
 
   // Animações
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -99,26 +74,18 @@ useEffect(() => {
     Alert.alert("Atenção", "Informe o email e a senha para acessar.");
   }
 
-//   function onClickLogin() {
-//   if (!login || !password) {
-//     Alert.alert("Erro", "Informe o email e a senha.");
-//     return;
-//   }
+// function onClickLogin() {
+//     const usuarioValido = dados.find(user => 
+//         user.email.trim().toLowerCase() === login.trim().toLowerCase() && 
+//         user.senha === password
+//     );
 
-//   // 1. Procuramos no array 'dados' se existe alguém com esse login e senha
-//   // 'user' representa cada linha da sua tabela 'usuarios'
-//   const usuarioValidado = dados.find(user => 
-//     user.email === login && user.senha === password
-//   );
-
-//   // 2. Se encontrarmos o objeto, o login é válido
-//   if (usuarioValidado) {
-//     Alert.alert("Sucesso", `Bem-vindo, ${usuarioValidado.nome || 'usuário'}!`);
-//     router.navigate("/(tabs)");
-//   } else {
-//     // 3. Se não encontrar, as credenciais estão erradas
-//     Alert.alert("Erro", "Login ou senha incorretos.");
-//   }
+//     if (usuarioValido) {
+//         alert("Sucesso! Bem-vindo " + usuarioValido.nome_usuario);
+//         router.navigate("/(tabs)");
+//     } else {
+//         alert("E-mail ou senha incorretos.");
+//     }
 // }
 
 function onClickLogin() {
@@ -128,12 +95,16 @@ function onClickLogin() {
     );
 
     if (usuarioValido) {
-        alert("Sucesso! Bem-vindo " + usuarioValido.email);
-        router.navigate("/(tabs)");
+        // Passamos o nome como parâmetro aqui
+        router.push({
+            pathname: "/(tabs)", // ou o nome da sua tela de início
+            params: { nomeUsuario: usuarioValido.nome_usuario } // Garanta que 'nome' existe no seu banco
+        });
     } else {
-        alert("E-mail ou senha incorretos.");
+        Alert.alert("Erro", "E-mail ou senha incorretos.");
     }
 }
+
   const isFormValid = login.trim() !== "" && password.trim() !== "";
 
   return (

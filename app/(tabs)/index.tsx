@@ -12,7 +12,7 @@ import {
   TextInput,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { 
   Scale, 
   Sparkles, 
@@ -35,6 +35,7 @@ const logoApp = require("@/assets/images/logo.png");
 
 export default function Home() {
   const router = useRouter();
+  const { nomeUsuario } = useLocalSearchParams(); // Ele pega a informação que foi enviado no log
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.9)).current;
   const [modalVisible, setModalVisible] = useState(false);
@@ -43,6 +44,8 @@ export default function Home() {
   const [editingMetric, setEditingMetric] = useState(null);
   const [recipeModalVisible, setRecipeModalVisible] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+
+  
 
   const [progressoSemanal, setProgressoSemanal] = useState({
     peso: { atual: 74, inicial: 75, meta: 70 },
@@ -277,7 +280,7 @@ export default function Home() {
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Image source={logoApp} style={styles.logo} resizeMode="contain" />
-          <Text style={styles.greeting}>Olá, Vitor</Text>
+          <Text style={styles.greeting}>Olá, {nomeUsuario ? nomeUsuario : "Usuário"}!</Text>
         </View>
         <TouchableOpacity onPress={() => router.push("/perfil")}>
           <Image 

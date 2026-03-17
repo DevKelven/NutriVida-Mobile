@@ -12,7 +12,7 @@ import {
   Switch,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import {
   User,
   Mail,
@@ -40,6 +40,8 @@ export default function Perfil() {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.9)).current;
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const { nomeUsuario } = useLocalSearchParams();
+  const { emailUsuario } = useLocalSearchParams();
 
   useEffect(() => {
     Animated.parallel([
