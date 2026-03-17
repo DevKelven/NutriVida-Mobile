@@ -44,16 +44,15 @@ export default function Login() {
   // }, []);
   
 useEffect(() => {
-  // Confirma se o IP 192.168.14.202 ainda é o mesmo (vê no ipconfig)
-  fetch('http://192.168.14.202:135/dados') 
+  // O 10.0.2.2 é o "atalho" do emulador para o seu PC
+  fetch('http://10.0.2.2:3000/dados') 
     .then(res => res.json())
     .then(json => {
       setDados(json);
-      console.log("Conectado via IPv4 com sucesso!");
+      console.log("✅ Conectado com sucesso!");
     })
     .catch(err => {
-      console.error("Erro via IPv4:", err);
-      // Se der erro aqui, é quase certo que o Firewall está a bloquear
+      console.error("❌ Erro de conexão:", err);
     });
 }, []);
 
@@ -100,28 +99,41 @@ useEffect(() => {
     Alert.alert("Atenção", "Informe o email e a senha para acessar.");
   }
 
-  function onClickLogin() {
-  if (!login || !password) {
-    Alert.alert("Erro", "Informe o email e a senha.");
-    return;
-  }
+//   function onClickLogin() {
+//   if (!login || !password) {
+//     Alert.alert("Erro", "Informe o email e a senha.");
+//     return;
+//   }
 
-  // 1. Procuramos no array 'dados' se existe alguém com esse login e senha
-  // 'user' representa cada linha da sua tabela 'usuarios'
-  const usuarioValidado = dados.find(user => 
-    user.email === login && user.senha === password
-  );
+//   // 1. Procuramos no array 'dados' se existe alguém com esse login e senha
+//   // 'user' representa cada linha da sua tabela 'usuarios'
+//   const usuarioValidado = dados.find(user => 
+//     user.email === login && user.senha === password
+//   );
 
-  // 2. Se encontrarmos o objeto, o login é válido
-  if (usuarioValidado) {
-    Alert.alert("Sucesso", `Bem-vindo, ${usuarioValidado.nome || 'usuário'}!`);
-    router.navigate("/(tabs)");
-  } else {
-    // 3. Se não encontrar, as credenciais estão erradas
-    Alert.alert("Erro", "Login ou senha incorretos.");
-  }
+//   // 2. Se encontrarmos o objeto, o login é válido
+//   if (usuarioValidado) {
+//     Alert.alert("Sucesso", `Bem-vindo, ${usuarioValidado.nome || 'usuário'}!`);
+//     router.navigate("/(tabs)");
+//   } else {
+//     // 3. Se não encontrar, as credenciais estão erradas
+//     Alert.alert("Erro", "Login ou senha incorretos.");
+//   }
+// }
+
+function onClickLogin() {
+    const usuarioValido = dados.find(user => 
+        user.email.trim().toLowerCase() === login.trim().toLowerCase() && 
+        user.senha === password
+    );
+
+    if (usuarioValido) {
+        alert("Sucesso! Bem-vindo " + usuarioValido.email);
+        router.navigate("/(tabs)");
+    } else {
+        alert("E-mail ou senha incorretos.");
+    }
 }
-
   const isFormValid = login.trim() !== "" && password.trim() !== "";
 
   return (

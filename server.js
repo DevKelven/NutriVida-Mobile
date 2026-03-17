@@ -25,10 +25,9 @@ app.get('/dados', (req, res) => { // aqui estou criando minha rota/endpoint cham
 
 // aqui ligamos o servidor para deixar a PI rodando
 // app.listen(3000, () => console.log("API rodando na porta 3000"));
-const PORTA = 135;
+
 
 // O '0.0.0.0' é fundamental: ele diz ao Node para ouvir o IP da rede, não só o localhost
-app.listen(PORTA, '0.0.0.0', () => {
-    console.log(`✅ Servidor rodando no IP da rede!`);
-    console.log(`Endereço: http://192.168.14.202:${PORTA}/dados`);
+app.listen(3000, '0.0.0.0', () => {
+    console.log("Servidor rodando! Emulador deve usar http://10.0.2.2:3000/dados");
 });
