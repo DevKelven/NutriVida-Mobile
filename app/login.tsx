@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
+
 import {
   Alert,
   Image,
@@ -15,13 +16,14 @@ import {
 import { Link, useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const logoApp = require("@/assets/images/Logonutri.png");
 
 interface Usuario {
   email: string;
   senha: string;
-  nome_usuario: string; 
+  nome_usuario: string;
 }
 
 export default function Login() {
@@ -31,17 +33,17 @@ export default function Login() {
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
 
-useEffect(() => {
-  fetch('http://10.0.2.2:3000/dados') // O Ip é do Android Studio
-    .then(res => res.json())
-    .then(json => {
-      setDados(json);
-      console.log("✅ Conectado com sucesso!");
-    })
-    .catch(err => {
-      console.error("❌ Erro de conexão:", err);
-    });
-}, []);
+  useEffect(() => {
+    fetch('http://10.0.2.2:3000/dados') // O Ip é do Android Studio
+      .then(res => res.json())
+      .then(json => {
+        setDados(json);
+        console.log("✅ Conectado com sucesso!");
+      })
+      .catch(err => {
+        console.error("❌ Erro de conexão:", err);
+      });
+  }, []);
 
   // Animações
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -74,41 +76,45 @@ useEffect(() => {
     Alert.alert("Atenção", "Informe o email e a senha para acessar.");
   }
 
-// function onClickLogin() {
-//     const usuarioValido = dados.find(user => 
-//         user.email.trim().toLowerCase() === login.trim().toLowerCase() && 
-//         user.senha === password
-//     );
+  // function onClickLogin() {
+  //     const usuarioValido = dados.find(user => 
+  //         user.email.trim().toLowerCase() === login.trim().toLowerCase() && 
+  //         user.senha === password
+  //     );
 
-//     if (usuarioValido) {
-//         alert("Sucesso! Bem-vindo " + usuarioValido.nome_usuario);
-//         router.navigate("/(tabs)");
-//     } else {
-//         alert("E-mail ou senha incorretos.");
-//     }
-// }
+  //     if (usuarioValido) {
+  //         alert("Sucesso! Bem-vindo " + usuarioValido.nome_usuario);
+  //         router.navigate("/(tabs)");
+  //     } else {
+  //         alert("E-mail ou senha incorretos.");
+  //     }
+  // }
 
-function onClickLogin() {
-    const usuarioValido = dados.find(user => 
-        user.email.trim().toLowerCase() === login.trim().toLowerCase() && 
-        user.senha === password
+ async function onClickLogin() {
+    const usuarioValido = dados.find(user =>
+      user.email.trim().toLowerCase() === login.trim().toLowerCase() &&
+      user.senha === password
     );
 
-    if (usuarioValido) {
-        // Passamos o nome como parâmetro aqui
-        router.push({
-            pathname: "/(tabs)", // ou o nome da sua tela de início
-            params: { nomeUsuario: usuarioValido.nome_usuario } // Garanta que 'nome' existe no seu banco
-        });
+   if (usuarioValido) {
+        try {
+            // SALVANDO O NOME: Aqui o erro 'never read' desaparece!
+            await AsyncStorage.setItem('@usuario_nome', usuarioValido.nome_usuario);
+            
+            console.log("Nome salvo na memória!");
+            router.replace("/(tabs)"); // Navega para a tela inicial
+        } catch (e) {
+            console.error("Erro ao salvar o nome", e);
+        }
     } else {
-        Alert.alert("Erro", "E-mail ou senha incorretos.");
+        alert("E-mail ou senha incorretos.");
     }
 }
 
   const isFormValid = login.trim() !== "" && password.trim() !== "";
 
   return (
-    
+
     <LinearGradient
       colors={["#0a1f1a", "#0f172a"]}
       style={styles.gradient}

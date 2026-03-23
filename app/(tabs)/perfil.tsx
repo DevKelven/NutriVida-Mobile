@@ -1,35 +1,35 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Dimensions,
-  Image,
-  Animated,
-  Alert,
-  Switch,
-} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import {
-  User,
+  Award,
+  Bell,
+  Calendar,
+  Camera,
+  ChevronRight,
+  Crown,
+  Edit,
+  HelpCircle,
+  Lock,
+  LogOut,
   Mail,
   Phone,
-  Calendar,
   Settings,
-  Bell,
-  Lock,
-  HelpCircle,
-  LogOut,
-  Edit,
-  Crown,
-  Award,
   TrendingUp,
-  ChevronRight,
-  Camera,
+  User,
 } from "lucide-react-native";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Alert,
+  Animated,
+  Dimensions,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 const { width } = Dimensions.get("window");
 const perfilIcon = require("@/assets/images/perfilicon.png");

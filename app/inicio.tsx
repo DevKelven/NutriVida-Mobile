@@ -1,7 +1,8 @@
+import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 import React, { useEffect } from "react";
 import { Image, StyleSheet, View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient"; 
-import { useRouter } from "expo-router";
+
 
 const logoApp = require("@/assets/images/Logonutri.png");
 
